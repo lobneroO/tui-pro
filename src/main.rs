@@ -2,10 +2,13 @@ use std::io::{self, stdout};
 
 use crossterm::{
     event::{self, Event, KeyCode},
-    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
+    terminal::{disable_raw_mode, enable_raw_mode,
+            EnterAlternateScreen, LeaveAlternateScreen},
     ExecutableCommand,
 };
 use ratatui::{prelude::*, widgets::*};
+
+mod tui;
 
 fn main() -> io::Result<()> {
     enable_raw_mode()?;
@@ -26,7 +29,9 @@ fn main() -> io::Result<()> {
 fn handle_events() -> io::Result<bool> {
     if event::poll(std::time::Duration::from_millis(50))? {
         if let Event::Key(key) = event::read()? {
-            if key.kind == event::KeyEventKind::Press && key.code == KeyCode::Char('q') {
+            if key.kind == event::KeyEventKind::Press 
+                && (key.code == KeyCode::Char('q')
+                    || key.code == KeyCode::Char('Q')){
                 return Ok(true);
             }
         }
